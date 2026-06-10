@@ -19,7 +19,7 @@ jobs:
         run: |
           docker run -d -p 9999:80 --name test-container myapp-test
           sleep 3
-          curl -f http://localhost:9999 || exit 1
+          curl -f http://localhost:9999 || (docker stop test-container && docker rm test-container && exit 1)
           docker stop test-container
           docker rm test-container
 
@@ -48,4 +48,4 @@ jobs:
           tags: lovesdock/myapp:latest
 
       - name: Deploy to Kubernetes
-        run: helm upgrade myapp ./myapp
+        run: helm upgrade --install myapp ./myapp
