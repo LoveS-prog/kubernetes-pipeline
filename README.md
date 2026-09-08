@@ -24,11 +24,12 @@ Prometheus samlar in metrics från klustret som CPU, minne och status på pods. 
 graph TD
     Kod -->|Git Push| GitHub[GitHub]
     GitHub -->|Trigger| Runner[Ubuntu server i VirtualBox]
-    Runner -->|1. Bygg och testa| Runner
-    Runner -->|2. Push till Docker Hub| DockerHub[Docker Hub]
+    Runner -->|1. Bygg och testa| Image[Docker image]
+    Image -->|2. Push| DockerHub[Docker Hub]
     Runner -->|3. Helm deploy| Minikube[Kubernetes kluster]
-    Minikube -->|4. Samla metrics| Prometheus[Prometheus]
-    Prometheus -->|5. Visa grafer| Grafana[Grafana]
+    DockerHub -->|4. Hämtar image| Minikube
+    Minikube -->|5. Samla metrics| Prometheus[Prometheus]
+    Prometheus -->|6. Visa grafer| Grafana[Grafana]
 ```
 
 ## Mappen k8s
