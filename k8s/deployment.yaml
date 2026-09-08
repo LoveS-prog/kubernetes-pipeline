@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: lovesprog/myapp:latest
+        image: lovesdock/myapp:latest
         ports:
         - containerPort: 80
 ---

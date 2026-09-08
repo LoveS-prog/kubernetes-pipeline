@@ -17,11 +17,15 @@ jobs:
 
       - name: Run test
         run: |
+          docker rm -f test-container 2>/dev/null || true
           docker run -d -p 9999:80 --name test-container myapp-test
           sleep 3
-          curl -f http://localhost:9999 || (docker stop test-container && docker rm test-container && exit 1)
-          docker stop test-container
-          docker rm test-container
+          if ! curl -f http://localhost:9999; then
+            docker logs test-container
+            docker rm -f test-container
+            exit 1
+          fi
+          docker rm -f test-container
 
   build:
     runs-on: self-hosted
@@ -45,7 +49,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: lovesdock/myapp:latest
+          tags: |
+            lovesdock/myapp:latest
+            lovesdock/myapp:${{ github.sha }}
 
       - name: Deploy to Kubernetes
-        run: helm upgrade --install myapp ./myapp
+        run: helm upgrade --install myapp ./myapp --set image.tag=${{ github.sha }}

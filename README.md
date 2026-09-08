@@ -31,6 +31,10 @@ graph TD
     Prometheus -->|5. Visa grafer| Grafana[Grafana]
 ```
 
+## Mappen k8s
+
+Filerna i `k8s/` var mina första manifest. I början deployade jag appen för hand med `kubectl apply` på varje fil. Problemet var att jag fick ändra i filerna varje gång jag skulle uppdatera något. Så jag bytte till Helm för att slippa det. Manifesten ligger kvar som referens, men pipelinen använder Helm-charten i `myapp/` nu.
+
 ## Teknik
 
 * VirtualBox med Ubuntu server för miljö
